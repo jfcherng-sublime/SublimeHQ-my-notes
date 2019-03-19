@@ -2,9 +2,6 @@
 
 The following takes `Ubuntu Cosmic (18.04)` as an example.
 
-Note that the [cquery](https://github.com/cquery-project/cquery) LSP does quite the same thing. 
-The key is that you have to generate a `compile_commands.json` for your project.
-
 
 ## Installation Prerequisites
 
@@ -14,6 +11,8 @@ The key is that you have to generate a `compile_commands.json` for your project.
   1. Add the LLVM apt repository as listed on the above web page:
   
      You have to change the following command depending on your Ubuntu version.
+     Please check the apt repositories' web page as described above.
+     The minimal LLVM version required is `7`. Here I use version `8` anyway.
   
      ```bash
      sudo su -c "cat > /etc/apt/sources.list.d/llvm-toolchain-cosmic.list <<EOF
@@ -66,7 +65,7 @@ You may want to add `compile_commands.json` into you `.gitignore` as well.
 
 ## Setup for Sublime Text LSP
 
-1. Install `LSP` via Package Control.
+1. Install [LSP](https://packagecontrol.io/packages/LSP) via Package Control.
 1. Here's a `clangd` LSP settings example:
 
    ```javascript
@@ -75,8 +74,9 @@ You may want to add `compile_commands.json` into you `.gitignore` as well.
        "clangd": {
          "enabled": true,
          "command": [
-           "clangd", // you may use an absolute path
-           "-header-insertion-decorators=0",
+           "clangd", // you may use an absolute path for this clangd executable
+           "-function-arg-placeholders=0",
+           "-header-insertion-decorators=1",
            "-index",
          ],
          "scopes": ["source.c", "source.c++", "source.objc", "source.objc++"],
@@ -114,3 +114,30 @@ You may want to add `compile_commands.json` into you `.gitignore` as well.
 - https://github.com/nickdiego/compiledb
 - https://github.com/Sarcasm/compdb#generating-a-compilation-database-including-header-files
 - https://clang.llvm.org/extra/clangd/Installation.html
+
+
+# `clangd` on Windows?
+
+I hardly write C/C++ codes on Windows but I did make some trying.
+The official LLVM/Clang support on Windows is for MSVC-only.
+So I use partial MSVC + LLVM/Clang combination to make `clangd` work.
+
+1. Donwload the [Visual Studio Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=15) `vs_buildtools.exe`.
+1. Execute `vs_buildtools.exe` and install `VC++ build tools`, `Windows 10 SDK` and `CMake VC++ tools` 
+   as shown in this [screenshot](https://raw.githubusercontent.com/jfcherng/my-Sublime-Text-notes/master/images/windows-vs_buildtools-for-clangd.png).
+1. Download the pre-built LLVM binaries from [here](http://releases.llvm.org/download.html) or even a nightly build from [here](https://llvm.org/builds/).
+   Remember that the minimal version has to be `7` for `clangd` to work properly. I use a nightly build here anyway.
+1. Install the downloaded LLVM installer.
+1. Reboot your PC.
+1. I do not do any extra setup and `clangd` is working now.
+   I use the same LSP settings with the one I used in `Ubuntu` above.
+   Of course, you still have to deal with generating a `compile_commands.json`
+   which seems to be a harder part on Windows.
+
+
+# How about the `cquery` LSP?
+
+[cquery](https://github.com/cquery-project/cquery) LSP does quite the same thing. 
+The key is that you have to generate a `compile_commands.json` for your project. 
+But, [it looks like](https://github.com/cquery-project/cquery/issues/867) `cquery` 
+has been abandoned due to its inactivity and the thriving of `clangd`.
