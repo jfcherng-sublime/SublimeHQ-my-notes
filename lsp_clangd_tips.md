@@ -1,6 +1,6 @@
 # Sublime Text C/C++ `clangd` LSP Tips
 
-The following takes `Ubuntu Cosmic (18.04)` as an example.
+The following takes `Ubuntu Bionic (18.04)` as an example.
 
 
 ## Installation Prerequisites
@@ -15,9 +15,9 @@ The following takes `Ubuntu Cosmic (18.04)` as an example.
      The minimal LLVM version required is `7`. Here I use version `8` anyway.
   
      ```bash
-     sudo su -c "cat > /etc/apt/sources.list.d/llvm-toolchain-cosmic.list <<EOF
-     deb http://apt.llvm.org/cosmic/ llvm-toolchain-cosmic-8 main
-     deb-src http://apt.llvm.org/cosmic/ llvm-toolchain-cosmic-8 main
+     sudo su -c "cat > /etc/apt/sources.list.d/llvm-toolchain-bionic.list <<EOF
+     deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
+     deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
      EOF"
      ```
   
@@ -27,7 +27,7 @@ The following takes `Ubuntu Cosmic (18.04)` as an example.
   1. Make sure `clangd` is available with the correct version: `$ clangd --version`
   
      ```
-     clangd version 8.0.0-svn356034-1~exp1~20190313093039.54 (branches/release_80)
+     clangd version 8.0.1-svn360950-1~exp1~20190517004233.70 (branches/release_80)
      ```
 
 
@@ -122,7 +122,7 @@ I hardly write C/C++ codes on Windows but I did make some trying.
 The official LLVM/Clang support on Windows is for MSVC-only.
 So I use partial MSVC + LLVM/Clang combination to make `clangd` work.
 
-1. Donwload the [Visual Studio Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=15) `vs_buildtools.exe`.
+1. Donwload the [Visual Studio Build Tools 2017](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=15) (maybe 2019 works as well) `vs_buildtools.exe`.
 1. Execute `vs_buildtools.exe` and install `VC++ build tools`, `Windows 10 SDK` and `CMake VC++ tools` 
    as shown in this [screenshot](https://raw.githubusercontent.com/jfcherng/my-Sublime-Text-notes/master/images/windows-vs_buildtools-for-clangd.png).
 1. Download the pre-built LLVM binaries from [here](http://releases.llvm.org/download.html) or even a nightly build from [here](https://llvm.org/builds/).
