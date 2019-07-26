@@ -1,6 +1,7 @@
 # Sublime Text C/C++ `clangd` LSP Tips
 
 The following takes `Ubuntu Bionic (18.04)` as an example.
+For Windows, see [here](#clangd-on-windows).
 
 
 ## Installation Prerequisites
@@ -66,7 +67,7 @@ You may want to add `compile_commands.json` into you `.gitignore` as well.
 ## Setup for Sublime Text LSP
 
 1. Install [LSP](https://packagecontrol.io/packages/LSP) via Package Control.
-1. Here's a `clangd` LSP settings example:
+1. Here's a `clangd` LSP settings example (`Menu > Preferences > Packages Settings > LSP > Settings`):
 
    ```javascript
    {
@@ -80,7 +81,12 @@ You may want to add `compile_commands.json` into you `.gitignore` as well.
            "-index",
          ],
          "scopes": ["source.c", "source.c++", "source.objc", "source.objc++"],
-         "syntaxes": ["Packages/C++/C.sublime-syntax", "Packages/C++/C++.sublime-syntax", "Packages/Objective-C/Objective-C.sublime-syntax", "Packages/Objective-C/Objective-C++.sublime-syntax"],
+         "syntaxes": [
+           "Packages/C++/C.sublime-syntax",
+           "Packages/C++/C++.sublime-syntax",
+           "Packages/Objective-C/Objective-C.sublime-syntax",
+           "Packages/Objective-C/Objective-C++.sublime-syntax",
+         ],
          "languageId": "cpp",
        },
      },
@@ -88,7 +94,7 @@ You may want to add `compile_commands.json` into you `.gitignore` as well.
    ```
 
 1. If you have other related linters enabled, you may want to disable them since LSP is more powerful.
-   To do that in your project, edit the project settings (Menu > Project > Edit Project):
+   To do that in your project, edit the project settings (`Menu > Project > Edit Project`):
 
    ```javascript
    {
@@ -109,7 +115,7 @@ You may want to add `compile_commands.json` into you `.gitignore` as well.
 
 ## References
 
-- https://lsp.readthedocs.io/en/latest/#cc-clangd
+- https://lsp.readthedocs.io/en/stable/cplusplus/#clangd
 - https://github.com/tomv564/LSP/issues/398
 - https://github.com/nickdiego/compiledb
 - https://github.com/Sarcasm/compdb#generating-a-compilation-database-including-header-files
@@ -120,17 +126,18 @@ You may want to add `compile_commands.json` into you `.gitignore` as well.
 
 I hardly write C/C++ codes on Windows but I did make some trying.
 The official LLVM/Clang support on Windows is for MSVC-only.
-So I use partial MSVC + LLVM/Clang combination to make `clangd` work.
+So I use MSVC + LLVM/Clang combination to make `clangd` work.
 
-1. Donwload the [Visual Studio Build Tools 2017](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=15) (maybe 2019 works as well) `vs_buildtools.exe`.
+1. Donwload the [Visual Studio Build Tools 2017](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=15) or [2019](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16) `vs_buildtools.exe`. I was using 2017 but now I am using 2019 so both of them should work.
 1. Execute `vs_buildtools.exe` and install `VC++ build tools`, `Windows 10 SDK` and `CMake VC++ tools` 
    as shown in this [screenshot](https://raw.githubusercontent.com/jfcherng/my-Sublime-Text-notes/master/images/windows-vs_buildtools-for-clangd.png).
-1. Download the pre-built LLVM binaries from [here](http://releases.llvm.org/download.html) or even a nightly build from [here](https://llvm.org/builds/).
-   Remember that the minimal version has to be `7` for `clangd` to work properly. I use a nightly build here anyway.
-1. Install the downloaded LLVM installer.
+1. Download the [stable pre-built LLVM binaries](http://releases.llvm.org/download.html) or even a [nightly build](https://llvm.org/builds/).
+   Remember that the minimal version has to be `7` for `clangd` to work properly. By the way, I use a **nightly build** here we I am writing this note.
+1. Install the downloaded offline LLVM installer.
 1. Reboot your PC.
-1. I do not do any extra setup and `clangd` is working now.
-   I use the same LSP settings with the one I used in `Ubuntu` above.
+1. Make sure `clangd` is available from PATH. Open `cmd` and execute
+   `$ clangd --version` should show something like `clangd version 9 (trunk)`.
+1. I use the same LSP settings with the one I used in `Ubuntu` above.
    Of course, you still have to deal with generating a `compile_commands.json`
    which seems to be a harder part on Windows.
 
@@ -140,4 +147,5 @@ So I use partial MSVC + LLVM/Clang combination to make `clangd` work.
 [cquery](https://github.com/cquery-project/cquery) LSP does quite the same thing. 
 The key is that you have to generate a `compile_commands.json` for your project. 
 But, [it looks like](https://github.com/cquery-project/cquery/issues/867) `cquery` 
-has been abandoned due to its inactivity and the thriving of `clangd`.
+has been abandoned due to its inactivity and the thriving of `clangd` which is 
+developed by the official LLVM/Clang team.
