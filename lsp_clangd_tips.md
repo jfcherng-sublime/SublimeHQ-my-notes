@@ -13,22 +13,22 @@ For Windows, see [here](#clangd-on-windows).
   
      You have to change the following command depending on your Ubuntu version.
      Please check the apt repositories' web page as described above.
-     The minimal LLVM version required is `7`. Here I use version `8` anyway.
+     The minimal LLVM version required is `7`. Here I use version `10` anyway.
   
      ```bash
      sudo su -c "cat > /etc/apt/sources.list.d/llvm-toolchain-bionic.list <<EOF
-     deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
-     deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main
+     deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
+     deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main
      EOF"
      ```
   
   1. Fetch information from the newly added repository: `$ sudo apt update`
-  1. Install clang-tools: `$ sudo apt install clang-tools-8`
-  1. Prefer using the installed clangd: `$ sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-8 100`
+  1. Install clang-tools: `$ sudo apt install clang-tools-10 clangd-10`
+  1. Prefer using the installed clangd: `$ sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-10 100`
   1. Make sure `clangd` is available with the correct version: `$ clangd --version`
   
      ```
-     clangd version 8.0.1-svn360950-1~exp1~20190517004233.70 (branches/release_80)
+     clangd version 10.0.0-svn371101-1~exp1+0~20190905175528.1178~1.gbpc222ee (trunk)
      ```
 
 
@@ -128,15 +128,22 @@ I hardly write C/C++ codes on Windows but I did make some trying.
 The official LLVM/Clang support on Windows is for MSVC-only.
 So I use MSVC + LLVM/Clang combination to make `clangd` work.
 
-1. Donwload the [Visual Studio Build Tools 2017](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=15) or [2019](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16) `vs_buildtools.exe`. I was using 2017 but now I am using 2019 so both of them should work.
+1. Donwload the [Visual Studio Build Tools 2017](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=15) or [2019](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16) `vs_buildtools.exe`.
 1. Execute `vs_buildtools.exe` and install `VC++ build tools`, `Windows 10 SDK` and `CMake VC++ tools` 
    as shown in this [screenshot](https://raw.githubusercontent.com/jfcherng/my-Sublime-Text-notes/master/images/windows-vs_buildtools-for-clangd.png).
-1. Download the [stable pre-built LLVM binaries](http://releases.llvm.org/download.html) or even a [nightly build](https://llvm.org/builds/).
-   Remember that the minimal version has to be `7` for `clangd` to work properly. By the way, I use a **nightly build** here we I am writing this note.
+1. Download one of the following.
+   Remember that the minimal version has to be `7` for `clangd` to work properly.
+   I use stable `LLVM 9.0.0` when I am writing this note.
+
+   - [stable builds](http://releases.llvm.org/download.html)
+   - [release candidates builds](https://prereleases.llvm.org)
+   - [snapshot builds](https://llvm.org/builds/)
+
 1. Install the downloaded offline LLVM installer.
-1. Reboot your PC.
+   During the installation, [there is an option](https://raw.githubusercontent.com/jfcherng/my-Sublime-Text-notes/master/images/llvm_path_all_users.png) to add LLVM into `PATH` env.
+1. Maybe you have to reboot your PC to make the new `PATH` env work.
 1. Make sure `clangd` is available from PATH. Open `cmd` and execute
-   `$ clangd --version` should show something like `clangd version 9 (trunk)`.
+   `$ clangd --version` should show something like `clangd version 9.0.0 (tags/RELEASE_900/final)`.
 1. I use the same LSP settings with the one I used in `Ubuntu` above.
    Of course, you still have to deal with generating a `compile_commands.json`
    which seems to be a harder part on Windows.
